@@ -20,17 +20,15 @@ import android.view.View;
 
 import com.genry.phonegalleryandroid.Adapters.IPhotoItemDelegate;
 import com.genry.phonegalleryandroid.Adapters.RecyclerPhotosAdapter;
-import com.genry.phonegalleryandroid.Utility.IAppStateSetupDelegate;
-import com.genry.phonegalleryandroid._Application.App;
-import com.genry.phonegalleryandroid._Application.AppConstants;
-import com.genry.phonegalleryandroid._Application.AppState;
 import com.genry.phonegalleryandroid.DB.Models.Photo;
 import com.genry.phonegalleryandroid.R;
+import com.genry.phonegalleryandroid.Utility.IAppStateSetupDelegate;
 import com.genry.phonegalleryandroid.Utility.IImageLoadDelegate;
 import com.genry.phonegalleryandroid.Utility.ImageLoadTask;
 import com.genry.phonegalleryandroid.Utility.JsonDataLoader;
+import com.genry.phonegalleryandroid._Application.App;
+import com.genry.phonegalleryandroid._Application.AppConstants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GridPhotosActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Photo>>,
@@ -144,10 +142,10 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
         Photo photo = (Photo)view.getTag();
 
         Bundle bundle = new Bundle();
-        bundle.putLong("id", photo.id);
+        bundle.putLong("id", photo.getId());
 
         Intent detailedPhotoIntent = new Intent(this, SinglePhotoActivity.class);
-        detailedPhotoIntent.putExtra("id" , photo.id);
+        detailedPhotoIntent.putExtra("id" , photo.getId().intValue());
 
         detailedPhotoIntent.putExtras(bundle);
 

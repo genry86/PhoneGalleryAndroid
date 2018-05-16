@@ -17,7 +17,6 @@ import com.eftimoff.viewpagertransformers.CubeOutTransformer;
 import com.genry.phonegalleryandroid.Adapters.PhotoPagerAdapter;
 import com.genry.phonegalleryandroid._Application.App;
 import com.genry.phonegalleryandroid._Application.AppConstants;
-import com.genry.phonegalleryandroid._Application.AppState;
 import com.genry.phonegalleryandroid.Controls.PhotoViewPager;
 import com.genry.phonegalleryandroid.Fragments.IZoomPhotoDelegate;
 import com.genry.phonegalleryandroid.DB.Models.Photo;
@@ -63,7 +62,7 @@ public class SinglePhotoActivity extends AppCompatActivity implements IZoomPhoto
         photoPager.setAdapter(new PhotoPagerAdapter(getSupportFragmentManager(), this));
         photoPager.setPageTransformer(true, new CubeOutTransformer());
 
-        Integer photoId = Math.toIntExact(getIntent().getExtras().getLong("id"));
+        Long photoId = getIntent().getExtras().getLong("id");
         Integer index = App.State.getIndexById(photoId);
         photoPager.setCurrentItem(index);
     }
