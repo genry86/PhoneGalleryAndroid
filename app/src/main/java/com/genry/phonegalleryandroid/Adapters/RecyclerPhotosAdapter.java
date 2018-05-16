@@ -13,13 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.genry.phonegalleryandroid.Activities.GridPhotosActivity;
 import com.genry.phonegalleryandroid._Application.AppConstants;
 import com.genry.phonegalleryandroid.DB.Models.Photo;
 import com.genry.phonegalleryandroid.R;
 import com.genry.phonegalleryandroid.Utility.ImageUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerPhotosAdapter extends Adapter<RecyclerPhotosAdapter.PhotoViewHolder> {
