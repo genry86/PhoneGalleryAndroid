@@ -79,7 +79,7 @@ public class JsonDataLoader extends AsyncTaskLoader<List<Photo>> {
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
 
-                    Integer id = item.getInt("id");
+                    Long id = item.getLong("id");
                     String firstName = item.optString("first_name");
                     String lastName = item.optString("last_name");
                     String imageUrl = item.optString("avatar");

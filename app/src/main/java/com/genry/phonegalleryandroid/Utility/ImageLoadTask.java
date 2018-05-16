@@ -1,12 +1,10 @@
 package com.genry.phonegalleryandroid.Utility;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
 import com.genry.phonegalleryandroid.DB.Models.Photo;
-import com.genry.phonegalleryandroid._Application.App;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -43,7 +41,7 @@ public class ImageLoadTask extends AsyncTask<Photo, Void, Boolean> {
 
                 if (isSaved) {
                     photo.imageSrc = imageSrc;
-                    App.DB.photos().update(photo);
+                    photo.update();
                 }
             }
             catch (Exception e) {
