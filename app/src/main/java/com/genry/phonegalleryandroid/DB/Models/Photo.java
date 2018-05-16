@@ -1,47 +1,66 @@
 package com.genry.phonegalleryandroid.DB.Models;
 
+import com.genry.phonegalleryandroid.Utility.ImageUtils;
+
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.JoinEntity;
+import org.greenrobot.greendao.annotation.Property;
+import org.greenrobot.greendao.annotation.ToMany;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
-
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
-
-import com.genry.phonegalleryandroid.Utility.ImageUtils;
-import com.genry.phonegalleryandroid._Application.App;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.DaoException;
 
 @Entity
 public class Photo {
+    @Id
+    private Long id;
 
-    @PrimaryKey
-    public Integer id;
-
-    @ColumnInfo(name = "firstName")
+    @Property
     public String firstName;
 
-    @ColumnInfo(name = "lastName")
+    @Property
     public String lastName;
 
-    @ColumnInfo(name = "imageUrl")
+    @Property
     public String imageUrl;
 
-    @ColumnInfo(name = "imageSrc")
+    @Property
     public String imageSrc;
 
-    @Ignore
-    public Photo(Integer id, String firstName, String lastName, String imageUrl) {
+    @ToMany
+    @JoinEntity(
+            entity = TagPhotoJoin.class,
+            sourceProperty = "photoId",
+            targetProperty = "tagId"
+    )
+    private List<Tag> tags;
+
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+
+    /** Used for active entity operations. */
+    @Generated(hash = 566311508)
+    private transient PhotoDao myDao;
+
+    public Photo(Long id, String firstName, String lastName, String imageUrl) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.imageUrl = imageUrl;
     }
 
-    public Photo(Integer id, String firstName, String lastName, String imageUrl, String imageSrc) {
+
+
+    @Generated(hash = 1513668273)
+    public Photo(Long id, String firstName, String lastName, String imageUrl,
+            String imageSrc) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -49,21 +68,14 @@ public class Photo {
         this.imageSrc = imageSrc;
     }
 
-    @Ignore
-    public void addTag(Tag tag) {
-        if (App.DB.tags().getTagsByName(tag.name) == null) {
-            tag.id = (int)App.DB.tags().insert(tag);
-        }
 
-        TagPhotoJoin storedTagPhotoJoin = App.DB.tagPhotoJoinDao().getTagPhoto(tag.id, id);
 
-        if (storedTagPhotoJoin == null) {
-            TagPhotoJoin tagPhotoJoin = new TagPhotoJoin(tag.id, id);
-            App.DB.tagPhotoJoinDao().insert(tagPhotoJoin);
-        }
+    @Generated(hash = 1043664727)
+    public Photo() {
     }
 
-    @Ignore
+
+
     public Boolean checkPhotoIsDownloaded() {
         String tmpImageSrc = generateSrcName();
         imageSrc = ImageUtils.isImageFileExists(imageSrc) ? tmpImageSrc : null;
@@ -72,7 +84,7 @@ public class Photo {
     }
 
     public String getFullName() {
-         return firstName + " " + lastName;
+        return firstName + " " + lastName;
     }
 
     public String generateSrcName() {
@@ -115,4 +127,150 @@ public class Photo {
                 ", imageSrc='" + imageSrc + '\'' +
                 '}';
     }
+
+
+
+    public Long getId() {
+        return this.id;
+    }
+
+
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+
+
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+
+
+    public String getImageSrc() {
+        return this.imageSrc;
+    }
+
+
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
+
+
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 1360898091)
+    public List<Tag> getTags() {
+        if (tags == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            TagDao targetDao = daoSession.getTagDao();
+            List<Tag> tagsNew = targetDao._queryPhoto_Tags(id);
+            synchronized (this) {
+                if (tags == null) {
+                    tags = tagsNew;
+                }
+            }
+        }
+        return tags;
+    }
+
+
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 404234)
+    public synchronized void resetTags() {
+        tags = null;
+    }
+
+
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+
+
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+
+
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 442052972)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getPhotoDao() : null;
+    }
+
+
+
 }
