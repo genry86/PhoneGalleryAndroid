@@ -1,7 +1,10 @@
 package com.genry.phonegalleryandroid.Activities;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GridPhotosActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Photo>>,
-                                                                    IImageLoadDelegate, IPhotoItemDelegate, IAppStateSetupDelegate{
+                                                                    IImageLoadDelegate, IPhotoItemDelegate{
 
     public final String TAG = getClass().getSimpleName();
 
@@ -70,15 +73,29 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
         recyclerPhotosAdapter = new RecyclerPhotosAdapter(getBaseContext(), this, App.State.photos);
         photosRecyclerView.setAdapter(recyclerPhotosAdapter);
 
-        App.addStartActivity(this);
+        IntentFilter appStateintentFilter = new IntentFilter(App.Constants.APP_STATE_INITIALIZED);
+        registerReceiver(appStateInitialized, appStateintentFilter);
+
+        IntentFilter photoListintentFilter = new IntentFilter(App.Constants.PHOTO_LIST_REFRESHED);
+        registerReceiver(photosListRefresh, photoListintentFilter);
     }
 
-    @Override
-    public void appStateInitialized() {
-        Bundle bundle = new Bundle();
-        bundle.putString("page", page.toString());
-        loader = getSupportLoaderManager().initLoader(LOADER_ID, bundle, this);
-    }
+    private BroadcastReceiver appStateInitialized = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = new Bundle();
+            bundle.putString("page", page.toString());
+            loader = getSupportLoaderManager().initLoader(LOADER_ID, bundle, GridPhotosActivity.this);
+        }
+    } ;
+
+    private BroadcastReceiver photosListRefresh = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            recyclerPhotosAdapter.notifyDataSetChanged();
+        }
+    } ;
+
 
     int getColumnCount() {
         DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
@@ -129,7 +146,7 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
 
                 items.forEach(photo -> {
                     if (!photo.checkPhotoIsDownloaded()) {
-                        new ImageLoadTask( this).execute(photo);
+                        new ImageLoadTask().execute(photo);
                     }
                 });
             }
