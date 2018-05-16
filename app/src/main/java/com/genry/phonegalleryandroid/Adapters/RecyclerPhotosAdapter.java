@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.genry.phonegalleryandroid._Application.AppConstants;
@@ -36,11 +37,13 @@ public class RecyclerPhotosAdapter extends Adapter<RecyclerPhotosAdapter.PhotoVi
     public class PhotoViewHolder extends RecyclerView.ViewHolder {
         public TextView photoNameTextView;
         public ImageView photoImageView;
+        public ProgressBar progressBar;
 
         public PhotoViewHolder(View view) {
             super(view);
             photoNameTextView = (TextView) view.findViewById(R.id.photoNameTextView);
             photoImageView = (ImageView) view.findViewById(R.id.photoImageView);
+            progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
             view.setOnClickListener(photoItemClickListener);
         }
@@ -81,6 +84,11 @@ public class RecyclerPhotosAdapter extends Adapter<RecyclerPhotosAdapter.PhotoVi
         if (photo.imageSrc != null) {
             Bitmap photoBitmap = ImageUtils.getImageFromDeviceStorage(photo.imageSrc);
             holder.photoImageView.setImageBitmap(photoBitmap);
+            holder.progressBar.setVisibility(View.INVISIBLE);
+            holder.progressBar.setActivated(false);
+        } else {
+            holder.progressBar.setVisibility(View.VISIBLE);
+            holder.progressBar.setActivated(true);
         }
 
         holder.itemView.setTag(photo);
