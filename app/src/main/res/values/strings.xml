@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PhoneGalleryAndroid</string>
+    <string name="action_settings">Settings</string>
+    <string name="web_service_url">https://reqres.in/api/users?page=%d&amp;per_page=%d</string>
+    <string name="photo_description">photo</string>
+    <string name="todo">TODO</string>
+    <string name="photoName">Name</string>
+    <integer name="column_count">2</integer>
+</resources>
