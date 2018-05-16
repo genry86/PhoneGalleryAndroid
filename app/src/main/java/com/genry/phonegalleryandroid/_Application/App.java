@@ -2,6 +2,7 @@ package com.genry.phonegalleryandroid._Application;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -12,11 +13,8 @@ import com.genry.phonegalleryandroid.DB.Models.Tag;
 import com.genry.phonegalleryandroid.DB.Models.TagDao;
 import com.genry.phonegalleryandroid.DB.Models.User;
 import com.genry.phonegalleryandroid.DB.Models.UserDao;
-import com.genry.phonegalleryandroid.Utility.IAppStateSetupDelegate;
 
 import org.greenrobot.greendao.database.Database;
-
-import java.lang.ref.WeakReference;
 
 public class App extends Application {
 
@@ -27,8 +25,6 @@ public class App extends Application {
     public static AppState State = null;
 
     public static DaoSession DB = null;
-
-    private static WeakReference<IAppStateSetupDelegate> startActivity;
 
     @Override
     public void onCreate() {
@@ -42,10 +38,6 @@ public class App extends Application {
         DB = new DaoMaster(db).newSession();
 
         appStateSetupTask.execute();
-    }
-
-    public static void addStartActivity(IAppStateSetupDelegate startingActivity) {
-        startActivity = new WeakReference<>(startingActivity);
     }
 
     static AsyncTask<Void, Void, Void> appStateSetupTask = new AsyncTask<Void, Void, Void>() {
@@ -83,9 +75,9 @@ public class App extends Application {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            if (startActivity != null && startActivity.get() != null) {
-                startActivity.get().appStateInitialized();
-            }
+            Intent intent = new Intent();
+            intent.setAction(Constants.APP_STATE_INITIALIZED);
+            MainContext.sendBroadcast(intent);
         }
     };
 }

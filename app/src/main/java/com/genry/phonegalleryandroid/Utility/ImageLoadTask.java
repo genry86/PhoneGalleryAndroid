@@ -1,10 +1,12 @@
 package com.genry.phonegalleryandroid.Utility;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
 import com.genry.phonegalleryandroid.DB.Models.Photo;
+import com.genry.phonegalleryandroid._Application.App;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -14,13 +16,13 @@ import java.net.URL;
 
 public class ImageLoadTask extends AsyncTask<Photo, Void, Boolean> {
 
-    private WeakReference<IImageLoadDelegate> delegate;
+//    private WeakReference<IImageLoadDelegate> delegate;
 
     private Photo photo;
     private String imageSrc;
 
-    public ImageLoadTask(IImageLoadDelegate delegate) {
-        this.delegate = new WeakReference<>(delegate);
+    public ImageLoadTask() { //IImageLoadDelegate delegate
+//        this.delegate = new WeakReference<>(delegate);
     }
 
     @Override
@@ -63,9 +65,9 @@ public class ImageLoadTask extends AsyncTask<Photo, Void, Boolean> {
         super.onPostExecute(isSaved);
 
         if (isSaved) {
-            if (delegate.get() != null) {
-                delegate.get().photoDownloaded();
-            }
+            Intent intent = new Intent();
+            intent.setAction(App.Constants.PHOTO_LIST_REFRESHED);
+            App.MainContext.sendBroadcast(intent);
         }
     }
 }
