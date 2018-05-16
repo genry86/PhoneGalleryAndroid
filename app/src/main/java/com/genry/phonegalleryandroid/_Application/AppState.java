@@ -34,11 +34,11 @@ public class AppState {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public Photo getPhotoById(Integer id) {
+    public Photo getPhotoById(Long id) {
         AtomicReference<Photo> foundPhotoItem = new AtomicReference<>();
 
         photos.forEach((photoItem) -> {
-            if (photoItem.id.equals(id)) {
+            if (photoItem.getId().equals(id)) {
                 foundPhotoItem.set(photoItem);
             }
         });
@@ -47,7 +47,7 @@ public class AppState {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public Integer getIndexById(Integer id){
+    public Integer getIndexById(Long id){
         Photo photo = getPhotoById(id);
         return  photos.indexOf(photo);
     }
