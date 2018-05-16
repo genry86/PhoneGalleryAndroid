@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.genry.phonegalleryandroid.Adapters.IPhotoItemDelegate;
 import com.genry.phonegalleryandroid.Adapters.RecyclerPhotosAdapter;
@@ -44,6 +45,7 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
     private RecyclerView photosRecyclerView;
     private RecyclerPhotosAdapter recyclerPhotosAdapter;
     private RecyclerView.LayoutManager photosLayoutManager;
+    private ProgressBar centralProgressBar;
 
     @SuppressLint("ResourceType")
     @Override
@@ -52,6 +54,10 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
         setContentView(R.layout.activity_photos);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        centralProgressBar = findViewById(R.id.centralProgressBar);
+        centralProgressBar.setActivated(true);
+        centralProgressBar.setVisibility(View.VISIBLE);
 
         photosRecyclerView = findViewById(R.id.photosRecyclerView);
         photosRecyclerView.setHasFixedSize(true);
@@ -115,6 +121,9 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
 
                 App.State.addPhotos(items);
                 recyclerPhotosAdapter.notifyDataSetChanged();
+
+                centralProgressBar.setActivated(false);
+                centralProgressBar.setVisibility(View.INVISIBLE);
 
                 items.forEach(photo -> {
                     if (!photo.checkPhotoIsDownloaded()) {
