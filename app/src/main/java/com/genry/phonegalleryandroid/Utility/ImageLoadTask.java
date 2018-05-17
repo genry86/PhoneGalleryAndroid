@@ -17,14 +17,8 @@ import java.net.URL;
 
 public class ImageLoadTask extends AsyncTask<Photo, Void, Boolean> {
 
-//    private WeakReference<IImageLoadDelegate> delegate;
-
     private Photo photo;
     private String imageSrc;
-
-    public ImageLoadTask() { //IImageLoadDelegate delegate
-//        this.delegate = new WeakReference<>(delegate);
-    }
 
     @Override
     protected Boolean doInBackground(Photo... photos) {
