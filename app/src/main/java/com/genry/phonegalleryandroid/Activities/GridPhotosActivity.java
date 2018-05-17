@@ -67,8 +67,8 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
         setSupportActionBar(toolbar);
 
         centralProgressBar = findViewById(R.id.centralProgressBar);
-        centralProgressBar.setActivated(true);
-        centralProgressBar.setVisibility(View.VISIBLE);
+        centralProgressBar.setActivated(App.State.photos.size() != 0);
+        centralProgressBar.setVisibility(App.State.photos.size() == 0 ? View.VISIBLE : View.INVISIBLE);
 
         photosRecyclerView = findViewById(R.id.photosRecyclerView);
         photosRecyclerView.setHasFixedSize(true);
