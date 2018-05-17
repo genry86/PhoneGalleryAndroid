@@ -46,10 +46,10 @@ public class App extends Application {
         protected Void doInBackground(Void... voids) {
 
             // ****  GreenDao ORM
-//            DB.getUserDao().deleteAll();
-//            DB.getTagDao().deleteAll();
-//            DB.getPhotoDao().deleteAll();
-//            DB.getTagPhotoJoinDao().deleteAll();
+            DB.getUserDao().deleteAll();
+            DB.getTagDao().deleteAll();
+            DB.getPhotoDao().deleteAll();
+            DB.getTagPhotoJoinDao().deleteAll();
 
             User user = DB.getUserDao().queryBuilder().where(UserDao.Properties.Name.eq(Constants.DEFAULT_USER_NAME)).unique();
             if (user == null) {
