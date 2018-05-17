@@ -66,7 +66,8 @@ public class RecyclerPhotosAdapter extends Adapter<RecyclerPhotosAdapter.PhotoVi
         GridLayoutManager.LayoutParams lp = (GridLayoutManager.LayoutParams) itemView.getLayoutParams();
 
         Integer screenHeight = parent.getMeasuredHeight();
-        float convertedImageHeight = AppConstants.IMAGE_SIZE * displayMetrics.density;
+
+        float convertedImageHeight = context.getResources().getDimension(R.dimen.image_size) * displayMetrics.density;
         float approxCount = screenHeight / convertedImageHeight;
         double floorHeight = Math.floor(approxCount);
         long itemCountHeight = Math.round(floorHeight);

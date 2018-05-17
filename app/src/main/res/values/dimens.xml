@@ -1,4 +1,5 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="btn_height_small">16dp</dimen>
+    <dimen name="image_size">160px</dimen>
 </resources>

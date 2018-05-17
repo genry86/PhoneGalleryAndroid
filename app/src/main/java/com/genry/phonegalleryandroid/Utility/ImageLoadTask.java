@@ -9,7 +9,6 @@ import com.genry.phonegalleryandroid.DB.Models.Photo;
 import com.genry.phonegalleryandroid._Application.App;
 
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -60,7 +59,7 @@ public class ImageLoadTask extends AsyncTask<Photo, Void, Boolean> {
 
         if (isSaved) {
             Intent intent = new Intent();
-            intent.setAction(App.Constants.PHOTO_LIST_REFRESHED);
+            intent.setAction(App.Constants.PHOTO_LIST_REFRESHED_ACTION);
             App.MainContext.sendBroadcast(intent);
         }
     }

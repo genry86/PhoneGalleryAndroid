@@ -76,7 +76,7 @@ public class App extends Application {
             super.onPostExecute(aVoid);
 
             Intent intent = new Intent();
-            intent.setAction(Constants.APP_STATE_INITIALIZED);
+            intent.setAction(Constants.APP_STATE_INITIALIZED_ACTION);
             MainContext.sendBroadcast(intent);
         }
     };
