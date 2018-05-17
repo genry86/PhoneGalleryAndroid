@@ -3,16 +3,21 @@ package com.genry.phonegalleryandroid.Activities;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +35,7 @@ import com.genry.phonegalleryandroid._Application.AppConstants;
 import com.genry.phonegalleryandroid._Application.AppState;
 import com.genry.phonegalleryandroid.DB.Models.Photo;
 import com.genry.phonegalleryandroid.R;
+import com.genry.phonegalleryandroid.Utility.AlertDialogFragment;
 import com.genry.phonegalleryandroid.Utility.ImageLoadTask;
 import com.genry.phonegalleryandroid.Utility.JsonDataLoader;
 
@@ -40,6 +46,7 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
                                                                      IPhotoItemDelegate{
 
     public final String TAG = getClass().getSimpleName();
+    private final int MSG_SHOW_DIALOG = 123;
 
     private static final int LOADER_ID = 1;
     private Loader<List<Photo>> loader;
@@ -143,6 +150,8 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
                 centralProgressBar.setActivated(false);
                 centralProgressBar.setVisibility(View.INVISIBLE);
 
+                handler.sendEmptyMessage(MSG_SHOW_DIALOG);
+
                 items.forEach(photo -> {
 //                    if (!photo.checkPhotoIsDownloaded()) {
                         new ImageLoadTask().execute(photo);
@@ -152,6 +161,16 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
                 break;
         }
     }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what == MSG_SHOW_DIALOG) {
+                AlertDialogFragment alertDialogFragment = AlertDialogFragment.newInstance("Alert Dialog");
+                alertDialogFragment.show(getSupportFragmentManager(), "AlertDialog");
+            }
+        }
+    };
 
     @Override
     public void onLoaderReset(@NonNull Loader<List<Photo>> loader) {
@@ -173,4 +192,6 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
 
         startActivity(detailedPhotoIntent);
     }
+
+
 }
