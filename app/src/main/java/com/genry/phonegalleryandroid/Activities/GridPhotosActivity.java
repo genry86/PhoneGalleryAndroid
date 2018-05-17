@@ -3,7 +3,6 @@ package com.genry.phonegalleryandroid.Activities;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -14,10 +13,8 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +35,7 @@ import com.genry.phonegalleryandroid.R;
 import com.genry.phonegalleryandroid.Utility.AlertDialogFragment;
 import com.genry.phonegalleryandroid.Utility.ImageLoadTask;
 import com.genry.phonegalleryandroid.Utility.JsonDataLoader;
+import com.genry.phonegalleryandroid._Application.App;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +50,7 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
     private Loader<List<Photo>> loader;
 
     private Integer page = 1;
+    private Boolean data_loaded = false;
 
     private RecyclerView photosRecyclerView;
     private RecyclerPhotosAdapter recyclerPhotosAdapter;
@@ -79,10 +78,10 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
         recyclerPhotosAdapter = new RecyclerPhotosAdapter(getBaseContext(), this, App.State.photos);
         photosRecyclerView.setAdapter(recyclerPhotosAdapter);
 
-        IntentFilter appStateintentFilter = new IntentFilter(App.Constants.APP_STATE_INITIALIZED);
+        IntentFilter appStateintentFilter = new IntentFilter(App.Constants.APP_STATE_INITIALIZED_ACTION);
         registerReceiver(appStateInitialized, appStateintentFilter);
 
-        IntentFilter photoListintentFilter = new IntentFilter(App.Constants.PHOTO_LIST_REFRESHED);
+        IntentFilter photoListintentFilter = new IntentFilter(App.Constants.PHOTO_LIST_REFRESHED_ACTION);
         registerReceiver(photosListRefresh, photoListintentFilter);
     }
 
@@ -92,6 +91,7 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
             Bundle bundle = new Bundle();
             bundle.putString("page", page.toString());
             loader = getSupportLoaderManager().initLoader(LOADER_ID, bundle, GridPhotosActivity.this);
+//            loader = getSupportLoaderManager().restartLoader(LOADER_ID, bundle, GridPhotosActivity.this);
         }
     } ;
 
@@ -108,7 +108,7 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
 
         Integer screenWidth = this.getResources().getDisplayMetrics().widthPixels;
 
-        float convertedImageWidth = AppConstants.IMAGE_SIZE * displayMetrics.density;
+        float convertedImageWidth = getResources().getDimension(R.dimen.image_size) * displayMetrics.density;
         float approxCount = screenWidth / convertedImageWidth;
         double floorColumnCount = Math.floor(approxCount);
         long columnCount = Math.round(floorColumnCount);
@@ -144,19 +144,22 @@ public class GridPhotosActivity extends AppCompatActivity implements LoaderManag
         switch (loader.getId()) {
             case LOADER_ID: {
 
-                App.State.addPhotos(items);
-                recyclerPhotosAdapter.notifyDataSetChanged();
+                if (!data_loaded) {
+                    App.State.addPhotos(items);
+                    recyclerPhotosAdapter.notifyDataSetChanged();
 
-                centralProgressBar.setActivated(false);
-                centralProgressBar.setVisibility(View.INVISIBLE);
+                    centralProgressBar.setActivated(false);
+                    centralProgressBar.setVisibility(View.INVISIBLE);
 
-                handler.sendEmptyMessage(MSG_SHOW_DIALOG);
+                    handler.sendEmptyMessage(MSG_SHOW_DIALOG);
 
-                items.forEach(photo -> {
+                    items.forEach(photo -> {
 //                    if (!photo.checkPhotoIsDownloaded()) {
                         new ImageLoadTask().execute(photo);
 //                    }
-                });
+                    });
+                    data_loaded = true;
+                }
             }
                 break;
         }

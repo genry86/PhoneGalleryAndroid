@@ -1,6 +1,7 @@
 package com.genry.phonegalleryandroid.Activities;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.Nullable;
@@ -66,6 +67,8 @@ public class SinglePhotoActivity extends AppCompatActivity implements IZoomPhoto
         Integer photoId = Math.toIntExact(getIntent().getExtras().getLong("id"));
         Integer index = App.State.getIndexById(photoId);
         photoPager.setCurrentItem(index);
+
+        //        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_photo);
     }
 
     @Override
