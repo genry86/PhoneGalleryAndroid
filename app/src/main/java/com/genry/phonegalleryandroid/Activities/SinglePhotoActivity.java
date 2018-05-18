@@ -23,6 +23,7 @@ import com.genry.phonegalleryandroid.Fragments.IZoomPhotoDelegate;
 import com.genry.phonegalleryandroid.DB.Models.Photo;
 import com.genry.phonegalleryandroid.R;
 import com.genry.phonegalleryandroid.Utility.ImageUtils;
+import com.genry.phonegalleryandroid.databinding.ActivityPhotoBinding;
 
 public class SinglePhotoActivity extends AppCompatActivity implements IZoomPhotoDelegate {
 
@@ -50,24 +51,26 @@ public class SinglePhotoActivity extends AppCompatActivity implements IZoomPhoto
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
+//        setContentView(R.layout.activity_photo);
+        ActivityPhotoBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_photo);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(onClickListener);
+//        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
+//        floatingActionButton.setOnClickListener(onClickListener);
 
         photoPager = (PhotoViewPager) findViewById(R.id.photo_pager);
         photoPager.setAdapter(new PhotoPagerAdapter(getSupportFragmentManager(), this));
         photoPager.setPageTransformer(true, new CubeOutTransformer());
 
         Long photoId = getIntent().getExtras().getLong("id");
+        Photo photo = App.State.getPhotoById(photoId);
         Integer index = App.State.getIndexById(photoId);
         photoPager.setCurrentItem(index);
 
-        //        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_photo);
+        binding.setPhoto(photo);
     }
 
     @Override
@@ -93,4 +96,16 @@ public class SinglePhotoActivity extends AppCompatActivity implements IZoomPhoto
             ImageUtils.shareImage(SinglePhotoActivity.this, imageUri, photo.getFullName(), AppConstants.REQUEST_CODE_PHOTO_SHARED);
         }
     };
+
+    public void shareClickEvent(View view) {
+        Integer currentPhotoIndex = photoPager.getCurrentItem();
+        Photo photo = App.State.photos.get(currentPhotoIndex);
+
+        Uri imageUri = ImageUtils.getMediaStoreImageUri(photo.imageSrc);
+        mediaStoreSrc = imageUri.getPath();
+
+        photo.setLastName(photo.lastName + ".");
+
+        ImageUtils.shareImage(SinglePhotoActivity.this, imageUri, photo.getFullName(), AppConstants.REQUEST_CODE_PHOTO_SHARED);
+    }
 }

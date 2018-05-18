@@ -1,5 +1,9 @@
 package com.genry.phonegalleryandroid.DB.Models;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+
+import com.genry.phonegalleryandroid.BR;
 import com.genry.phonegalleryandroid.Utility.ImageUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -17,7 +21,7 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
 
 @Entity
-public class Photo {
+public class Photo extends BaseObservable {
     @Id
     private Long id;
 
@@ -59,8 +63,7 @@ public class Photo {
 
 
     @Generated(hash = 1513668273)
-    public Photo(Long id, String firstName, String lastName, String imageUrl,
-            String imageSrc) {
+    public Photo(Long id, String firstName, String lastName, String imageUrl, String imageSrc) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -83,6 +86,7 @@ public class Photo {
         return (imageSrc != null);
     }
 
+    @Bindable
     public String getFullName() {
         return firstName + " " + lastName;
     }
@@ -97,6 +101,8 @@ public class Photo {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
+        notifyPropertyChanged(BR.fullName);
         return imageFileName;
     }
 
@@ -153,18 +159,16 @@ public class Photo {
     }
 
 
-
+    @Bindable
     public String getLastName() {
         return this.lastName;
     }
 
 
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
+        notifyPropertyChanged(BR.fullName);
     }
-
-
 
     public String getImageUrl() {
         return this.imageUrl;
@@ -262,15 +266,10 @@ public class Photo {
         myDao.update(this);
     }
 
-
-
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 442052972)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getPhotoDao() : null;
     }
-
-
-
 }
