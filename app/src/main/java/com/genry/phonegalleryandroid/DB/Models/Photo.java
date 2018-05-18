@@ -1,5 +1,17 @@
 package com.genry.phonegalleryandroid.DB.Models;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+
+import com.genry.phonegalleryandroid.BR;
+import com.genry.phonegalleryandroid.Utility.ImageUtils;
+
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.JoinEntity;
+import org.greenrobot.greendao.annotation.Property;
+import org.greenrobot.greendao.annotation.ToMany;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,12 +28,11 @@ import com.genry.phonegalleryandroid.Utility.ImageUtils;
 import com.genry.phonegalleryandroid._Application.App;
 
 @Entity
-public class Photo {
+public class Photo extends BaseObservable {
+    @Id
+    private Long id;
 
-    @PrimaryKey
-    public Integer id;
-
-    @ColumnInfo(name = "firstName")
+    @Property
     public String firstName;
 
     @ColumnInfo(name = "lastName")
@@ -71,6 +82,7 @@ public class Photo {
         return (imageSrc != null);
     }
 
+    @Bindable
     public String getFullName() {
          return firstName + " " + lastName;
     }
@@ -85,6 +97,8 @@ public class Photo {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
+        notifyPropertyChanged(BR.fullName);
         return imageFileName;
     }
 

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Activities.GridPhotosActivity"
-    tools:showIn="@layout/activity_photos">
+    tools:showIn="@layout/activity_main">
 
     <TextView
         android:id="@+id/textView"
