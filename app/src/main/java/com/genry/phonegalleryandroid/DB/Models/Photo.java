@@ -6,12 +6,6 @@ import android.databinding.Bindable;
 import com.genry.phonegalleryandroid.BR;
 import com.genry.phonegalleryandroid.Utility.ImageUtils;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.JoinEntity;
-import org.greenrobot.greendao.annotation.Property;
-import org.greenrobot.greendao.annotation.ToMany;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,10 +23,11 @@ import com.genry.phonegalleryandroid._Application.App;
 
 @Entity
 public class Photo extends BaseObservable {
-    @Id
-    private Long id;
 
-    @Property
+    @PrimaryKey
+    public Integer id;
+
+    @ColumnInfo(name = "firstName")
     public String firstName;
 
     @ColumnInfo(name = "lastName")
@@ -128,5 +123,11 @@ public class Photo extends BaseObservable {
                 ", imageUrl='" + imageUrl + '\'' +
                 ", imageSrc='" + imageSrc + '\'' +
                 '}';
+    }
+
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+        notifyPropertyChanged(BR.fullName);
     }
 }

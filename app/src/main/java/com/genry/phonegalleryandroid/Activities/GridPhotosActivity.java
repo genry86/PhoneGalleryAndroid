@@ -26,7 +26,6 @@ import android.widget.ProgressBar;
 
 import com.genry.phonegalleryandroid.Adapters.IPhotoItemDelegate;
 import com.genry.phonegalleryandroid.Adapters.RecyclerPhotosAdapter;
-import com.genry.phonegalleryandroid.Utility.IAppStateSetupDelegate;
 import com.genry.phonegalleryandroid._Application.App;
 import com.genry.phonegalleryandroid._Application.AppConstants;
 import com.genry.phonegalleryandroid._Application.AppState;

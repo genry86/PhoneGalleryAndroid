@@ -11,7 +11,6 @@ import android.support.annotation.RequiresApi;
 import com.genry.phonegalleryandroid.DB.Models.Photo;
 import com.genry.phonegalleryandroid.DB.Models.Tag;
 import com.genry.phonegalleryandroid.DB.Models.User;
-import com.genry.phonegalleryandroid.Utility.IAppStateSetupDelegate;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

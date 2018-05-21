@@ -66,7 +66,7 @@ public class SinglePhotoActivity extends AppCompatActivity implements IZoomPhoto
         photoPager.setAdapter(new PhotoPagerAdapter(getSupportFragmentManager(), this));
         photoPager.setPageTransformer(true, new CubeOutTransformer());
 
-        Long photoId = getIntent().getExtras().getLong("id");
+        Integer photoId = getIntent().getExtras().getInt("id");
         Photo photo = App.State.getPhotoById(photoId);
         Integer index = App.State.getIndexById(photoId);
         photoPager.setCurrentItem(index);

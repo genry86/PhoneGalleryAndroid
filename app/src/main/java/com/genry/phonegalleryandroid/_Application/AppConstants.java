@@ -2,7 +2,6 @@ package com.genry.phonegalleryandroid._Application;
 
 public class AppConstants {
     public static final String DB_NAME = "PhotoGallery";
-    public static final String DB_NAME_2 = "PhotoGalleryGreenDao";
     public static final String PREFERENCE_STORAGE_NAME = "PhotoGallery";
 
     // Intent actions
